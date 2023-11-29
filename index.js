@@ -117,7 +117,21 @@ app.patch('/users/admin/:id', verifyToken, verifyAdmin, async (req, res) => {
   const result = await userCollection.updateOne(filter, updatedDoc);
   res.send(result);
 })
-   
+app.delete('/users/:id', verifyToken, verifyAdmin, async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) }
+  const result = await userCollection.deleteOne(query);
+  res.send(result);
+})
+
+
+
+// menu related apis
+app.get('/menu', async (req, res) => {
+  const result = await menuCollection.find().toArray();
+  res.send(result);
+})
+
    
 
     // Send a ping to confirm a successful connection
