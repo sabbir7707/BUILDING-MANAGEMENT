@@ -268,6 +268,19 @@ async function run() {
       const result = await cursor.toArray()
       res.send(result)
     })
+    /* announcement */
+
+    app.post('/announcement', verifyToken, verifyAdmin, async (req, res) => {
+      const item = req.body;
+      const result = await AnnouncementCollection.insertOne(item);
+      res.send(result);
+    });
+
+    app.get('/announcement', async (req, res) => {
+      const result = await AnnouncementCollection.find().toArray();
+      res.send(result);
+    })
+
 
 
 
