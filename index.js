@@ -36,6 +36,10 @@ async function run() {
     const cartCollection = client.db("bistrodb").collection("carts");
     const paymentCollection = client.db("bistrodb").collection("payments");
     const AnnouncementCollection = client.db("bistrodb").collection("announcement");
+    const agreementCollection = client.db("bistrodb").collection("agreement");
+
+
+ 
 
     /* jwt */
     app.post('/jwt', async (req, res) => {
@@ -283,14 +287,34 @@ async function run() {
 
 
 
+    app.get('/agreement',verifyToken, verifyAdmin, async (req, res) => {
+      const result = await agreementCollection.find().toArray();
+      res.send(result);
+    })
+
+
+    app.post('/agreement', verifyToken,   async (req, res) => {
+      const item = req.body;
+      const result = await  agreementCollection.insertOne(item);
+      res.send(result);
+    });
+
+    app.delete('/agreement/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await agreementCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
+
 
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
+    
   }
 }
 run().catch(console.dir);
